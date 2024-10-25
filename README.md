@@ -23,9 +23,11 @@ ASD 아동들이 사회적으로 더 잘 적응하고 소통하는데 필수적�
 ‘torch.utils.dat.DataLoader’를 사용하여 데이터를 미니배치 단위로 로드한다. 이를 통해 학습 과정에서 효율적으로 데이터를 처리할 수 있다. 전체 데이터셋은 train, val, test 용도로 6:2:2의 비율로 분할된다.		
 
 전처리 전:
+
 ![image](https://github.com/user-attachments/assets/77955e1d-5334-4c5b-b612-7140c4123214)
 
 전처리 후:
+
 ![image](https://github.com/user-attachments/assets/71f71b84-1b6b-4288-bf8f-0d4e1be351f0)
 
 3. 모델 학습
@@ -33,16 +35,19 @@ ASD 아동들이 사회적으로 더 잘 적응하고 소통하는데 필수적�
 CNN 모델 선정:
 각 모델은 이미지 분류에서의 성능을 극대화하기 위해 사전 학습된 가중치를 사용하였으며, 모델의 최종 출력 계층을 수정하여 6개의 표정 클래스를 분류하도록 설정하였다. 모든 모델의 손실 함수는 Cross Entropy Loss, Optimizer는 Adam으로 고정하여 일관된 비교를 가능하게 하였다.
 CNN 모델로는 resnet50, LeNet5, AlexNet, Vggnet, SEnet, EfficientNet, DenseNet, resnet152을 사용하였고, epoch를 30으로 설정하였을 때, resnet152, resnet50, Vggnet 순으로 높은 정확도를 보였다.
+
 ![image](https://github.com/user-attachments/assets/8e690fb8-7e3f-4231-aacd-d1fa5269e565)
 
 Loss Function 선정:
 Optimizer는 Adam으로 고정하였으며, 앞서 가장 높은 정확도를 보인 ResNet152 모델을 적용하였다.
 Loss function으로는 CroosEntropyLoss, MSELoss, MultiLabelSoftMarginLoss, MultiMarginLoss을 사용하였고, epoch를 30으로 설정하였을 때, 각 모델의 Best val Acc는 0.7722, 0.6962, 0.7511, 0.7553으로, CroosEntropyLoss에서 가장 높은 정확도를 보였다.
+
 ![image](https://github.com/user-attachments/assets/5bd9aa84-4bfd-40ac-8ac8-d9f98a8bcd85)
 
 Optimizer 선정:
 각 Optimizer의 성능을 비교하기 위해 Adam, Adagrad, RMSprop, SGD, 그리고 Ranger를 사용하여 모델을 학습시켰다. 각 Optimizer는 같은 모델 아키텍처 및 학습 파라미터를 사용하였으며, 학습률은 모두 1e-5로 설정하였다.
 epoch를 30으로 설정하였을 때, 각 Adam, Adagrad, RMSprop, SGD, Ranger 모델의 Best val Acc는 0.7511, 0.3333, 0.7553, 0.3671, 0.6624으로, RMSprop에서 가장 큰 정확도를 보였다.
+
 ![image](https://github.com/user-attachments/assets/99b6aef9-5703-4b57-af03-5f17e129957b)
 
 최종 모델:
@@ -57,6 +62,7 @@ Test 이미지 랜덤 10개 출력:
 각 disgust, anger, fear, happy 클래스의 test 이미지 예측 결과에서 "happy"와 "fear" 다른 표정에 비해 확률의 차이가 뚜렷하여 쉽게 예측이 가능하다는 것을 알 수 있다. 특히, "happy"와 "fear"에 대한 예측 정확성은 모델이 이러한 표정 인식에서 다른 감정과의 혼동이 적음을 시사하며, 이를 섬세하게 구분하고 예측할 수 있는 능력을 갖추고 있음을 보여준다.
 
 외부 이미지 출력:
+
 ![image](https://github.com/user-attachments/assets/fffee732-2eb5-475c-9a4e-3f8d4ca1f2a0)
 
 "happy"와 "disgust"에 대한 정확한 예측이 이루어졌다. 그러나“anger”와 “sad” 예측에서는 외부 이미지와 모델의 예측 간에 불일치가 발생하였다. 모델이 "anger"를 예측했으나 이미지에서는 해당 감정이 뚜렷하게 드러나지 않았다. 또한, "sad"에 대한 잘못된 예측에서는 모델이 높은 확률로 해당 감정을 예측했으나 이미지에서는 다른 감정이 더 두드러지는 것으로 보인다.
